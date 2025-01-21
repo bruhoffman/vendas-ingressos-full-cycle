@@ -35,9 +35,10 @@
 ### **Entidades Principais**
 
 1. **Parceiros**
+   
    Representam os criados de eventos e tickets.
+   
    **Campos:**
-
    - `id`: Identificador único (numérico).
    - `nome`: Nome completo do parceiro.
    - `email`: E-mail para login e contato.
@@ -45,9 +46,10 @@
    - `nome da empresa`: Nome da empresa associada.
 
 2. **Clientes**
+   
    Representam os compradores de ingressos.
+   
    **Campos:**
-
    - `id`: Identificador único (numérico).
    - `nome`: Nome completo do cliente.
    - `email`: E-mail para login e contato.
@@ -56,9 +58,10 @@
    - `telefone`: Telefone para contato.
 
 3. **Eventos**
-   Representam os eventos criados pelos parceiros.
-   **Campos:**
 
+   Representam os eventos criados pelos parceiros.
+
+   **Campos:**
    - `id`: Identificador único (numérico).
    - `nome`: Nome do evento.
    - `descricao`: Breve descrição do evento.
@@ -67,9 +70,10 @@
    - `parceiro_id`: ID do parceiro que criou o evento (chave estrangeira).
 
 4. **Tickets**
+ 
    Representam os ingressos disponíveis para cada envento.
-   **Campos:**
 
+   **Campos:**
    - `id`: Identificador único (numérico).
    - `evento_id`: ID do evento associado (chave estrangeira).
    - `local`: Identificador do assento (e.g., A1, B2).
