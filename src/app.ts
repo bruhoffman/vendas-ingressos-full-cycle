@@ -24,8 +24,18 @@ app.post('/customers', (req, res) => {
     const { name, email, password, address, telefone } = req.body
 });
 
-app.post('/events', (req, res) => {
+app.post('/partners/events', (req, res) => {
     const { name, description, date, location } = req.body
+});
+
+app.get('/partners/events', (req, res) => {
+
+});
+
+app.get('/partners/:eventId', (req, res) => {
+    const { eventId } = req.params;
+    console.log(eventId);
+    res.send();
 });
 
 app.get('/events', (req, res) => {
