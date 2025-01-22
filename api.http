@@ -29,8 +29,8 @@ Content-Type: application/json
     "phone": "33333333"
 }
 
-###
-POST http://localhost:3000/events 
+### Criação do evento pelo parceiro
+POST http://localhost:3000/partners/events 
 Content-Type: application/json
 
 {
@@ -40,8 +40,14 @@ Content-Type: application/json
     "location": "Local evento test"
 }
 
-###
+### Listagem dos eventos do parceiro
+GET http://localhost:3000/partners/events
+
+### Listagem de um evento do parceiro
+GET http://localhost:3000/partners/events/1000
+
+### Listagem de eventos
 GET http://localhost:3000/events
 
-###
+### Listagem de um evento
 GET http://localhost:3000/events/1000
