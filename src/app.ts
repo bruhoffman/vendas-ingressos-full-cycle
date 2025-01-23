@@ -1,4 +1,14 @@
 import express from 'express'
+import * as mysql from 'mysql2/promise'
+
+function createConnection(){
+    return mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'tickets'
+    })
+}
 
 const app = express();
 
@@ -14,10 +24,17 @@ app.post('/auth/login', (req, res) => {
     res.send();
 });
 
-app.post('/partners', (req, res) => {
+app.post('/partners', async (req, res) => {
     const { name, email, password, company_name } = req.body;
-    console.log(name, email, password, company_name)
-    res.send();
+    
+    const connection = await createConnection();
+    connection.execute('INSERT INTO users (name, email, password, created)', [
+        
+    ])
+    connection.execute('INSERT INTO partners (user_id, company_name, created_at)', [
+        
+    ])
+
 });
 
 app.post('/customers', (req, res) => {
