@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `partners` (
   INDEX `fk_partners_users1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_partners_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   INDEX `fk_customers_users_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_customers_users`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   INDEX `fk_events_partners1_idx` (`partners_id` ASC) VISIBLE,
   CONSTRAINT `fk_events_partners1`
     FOREIGN KEY (`partners_id`)
-    REFERENCES `mydb`.`partners` (`id`)
+    REFERENCES `partners` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
