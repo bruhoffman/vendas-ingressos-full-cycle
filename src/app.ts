@@ -1,7 +1,8 @@
-import express from 'express'
-import * as mysql from 'mysql2/promise'
+import express from 'express';
+import * as mysql from 'mysql2/promise';
+import bcrypt from 'bcrypt';
 
-function createConnection(){
+function createConnection() {
     return mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -26,15 +27,24 @@ app.post('/auth/login', (req, res) => {
 
 app.post('/partners', async (req, res) => {
     const { name, email, password, company_name } = req.body;
-    
     const connection = await createConnection();
-    connection.execute('INSERT INTO users (name, email, password, created)', [
-        
-    ])
-    connection.execute('INSERT INTO partners (user_id, company_name, created_at)', [
-        
-    ])
 
+    try {
+        const createdAt = new Date();
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        const [userResult] = await connection.execute<mysql.ResultSetHeader>('INSERT INTO users (name, email, password, created_at)',
+            [name, email, hashedPassword, createdAt]
+        );
+        const userId = userResult.insertId;
+
+        const [partnerResult] = await connection.execute<mysql.ResultSetHeader>('INSERT INTO partners (user_id, company_name, created_at)',
+            [userId, company_name, createdAt]
+        );
+        res.status(201).json({ id: partnerResult.insertId, userId, company_name, createdAt })
+    }finally{
+        await connection.end();
+    }
 });
 
 app.post('/customers', (req, res) => {
