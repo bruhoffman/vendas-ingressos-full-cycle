@@ -1,13 +1,31 @@
+###
+# @name loginPartner1
 POST http://localhost:3000/auth/login 
 Content-Type: application/json
 
 {
-    "email": "partner1#user.com",
+    "email": "partner1@user.com",
     "password": "secret"
 }
 
 ###
-POST http://localhost:3000/partners 
+@tokenPartner1 = {{ loginPartner1.response.body.token }}
+
+###
+# @name loginCustomer1
+POST http://localhost:3000/auth/login 
+Content-Type: application/json
+
+{
+    "email": "customer1@user.com",
+    "password": "secret"
+}
+
+###
+@tokenCustomer1 = {{ loginCustomer1.response.body.token }}
+
+###
+POST http://localhost:3000/partners/register
 Content-Type: application/json
 
 {
@@ -18,12 +36,12 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/customers 
+POST http://localhost:3000/customers/register 
 Content-Type: application/json
 
 {
     "name": "Customer 1",
-    "email": "customer@1user.com",
+    "email": "customer1@user.com",
     "password": "secret",
     "address": "adrress test",
     "phone": "33333333"
@@ -32,6 +50,7 @@ Content-Type: application/json
 ### Criação do evento pelo parceiro
 POST http://localhost:3000/partners/events 
 Content-Type: application/json
+Authorization: Bearer {{tokenPartner1}}
 
 {
     "name": "Evento test 1",
