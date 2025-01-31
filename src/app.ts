@@ -163,7 +163,6 @@ app.post('/partners/events', async (req, res) => {
 });
 
 app.get('/partners/events', async (req, res) => {
-
     const userId = req.user!.id;
 
     const connection = await createConnection();
@@ -178,35 +177,89 @@ app.get('/partners/events', async (req, res) => {
         if (!partner) {
             res.status(403).json({ message: 'Not authorized' });
             return;
-        }
+        };
 
-        const eventDate = new Date(date);
-        const createdAt = new Date();
-
-        const [eventResult] = await connection.execute<mysql.ResultSetHeader>('INSERT INTO events (name, description, date, location, created_at, partners_id) VALUES (?, ?, ?, ?, ?, ?)',
-            [name, description, eventDate, location, createdAt, partner.id]
+        const [eventsRows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT * FROM events WHERE partners_id = ?', [partner.id]
         );
 
-        res.status(201).json({ id: eventResult.insertId, name, description, date: eventDate, location, created_at: createdAt, partner_id: partner.id })
+        res.json(eventsRows)
+        
     } finally {
         await connection.end();
     }
 });
 
-app.get('/partners/:eventId', (req, res) => {
+app.get('/partners/events/:eventId', async (req, res) => {
     const { eventId } = req.params;
-    console.log(eventId);
-    res.send();
+    const userId = req.user!.id;
+    const connection = await createConnection();
+
+    try {
+        const [rows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT * FROM partners WHERE user_id = ?', [userId]
+        );
+
+        const partner = rows.length ? rows[0] : null;
+
+        if (!partner) {
+            res.status(403).json({ message: 'Not authorized' });
+            return;
+        };
+
+        const [eventsRows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT * FROM events WHERE partners_id = ? and id = ?', [partner.id, eventId]
+        );
+
+        const event = eventsRows.length ? eventsRows[0] : null;
+
+        if (!event){
+            res.status(404).json({ message: "Event not found"});
+        };
+
+        res.json(event)
+        
+    } finally {
+        await connection.end();
+    }
 });
 
-app.get('/events', (req, res) => {
+app.get('/events', async (req, res) => {
+    const connection = await createConnection();
 
+    try {
+        const [eventsRows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT * FROM events'
+        );
+
+        res.json(eventsRows)
+        
+    } finally {
+        await connection.end();
+    }
 });
 
-app.get('/events/:eventId', (req, res) => {
+app.get('/events/:eventId', async (req, res) => {
     const { eventId } = req.params;
-    console.log(eventId);
-    res.send();
+    const connection = await createConnection();
+
+    try {
+        const [eventsRows] = await connection.execute<mysql.RowDataPacket[]>(
+            'SELECT * FROM events WHERE id = ?', [eventId] 
+        );
+
+        const event = eventsRows.length ? eventsRows[0] : null;
+
+        if (!event){
+            res.status(404).json({ message: "Event not found"});
+            return
+        };
+
+        res.json(eventsRows)
+        
+    } finally {
+        await connection.end();
+    }
 });
 
 app.listen(3000, async () => {
